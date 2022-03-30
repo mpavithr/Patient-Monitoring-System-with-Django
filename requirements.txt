@@ -2,3 +2,4 @@ django-q
 Celery
 djangorestframework
 django
+speech_recognition
