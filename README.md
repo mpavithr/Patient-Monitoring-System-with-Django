@@ -33,8 +33,7 @@ How to track the tasks enqueued, success and failure of each
 
 Integrated by using a google library
 
-### Screenshots
-
+### Screenshots for speech2text module
 
 <img width="734" alt="Screen Shot 2022-03-30 at 6 01 39 PM" src="https://user-images.githubusercontent.com/42751267/160943622-3fd30dca-e09e-4701-ba29-2b90f293ee1b.png">
 
