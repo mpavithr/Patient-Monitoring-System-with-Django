@@ -1,6 +1,8 @@
 # Patient Monitoring System with Django + New Module
 
-## Migrated my previous repository Patient-Monitoring-System to Django and added a Speech to text module that implements a queue management system
+## Repository Explanation 
+
+Migrated my previous repository Patient-Monitoring-System to Django and added a Speech to text module that implements a queue management system.
 
 This repository fulfils Project 4 for the class EC 530. (Ignore this statement if you are not a TA/Professor for the BU class EC 530)
 
