@@ -34,9 +34,9 @@ class DeleteChatAPIView(DestroyAPIView):
     serializer_class = ChatSerializer
 
 
-@api_view(['POST'])
-def convert_speech_to_text(request):
-    """
-    List all chats, or create a new chat.
-    """
-    async_task('chat.tasks.speech_to_text', request.data['speech_file'])
+# @api_view(['POST'])
+# def convert_speech_to_text(request):
+#     """
+#     List all chats, or create a new chat.
+#     """
+#     async_task('chat.tasks.speech_to_text', request.data['speech_file'])
