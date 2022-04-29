@@ -13,8 +13,6 @@ class Doctor(models.Model):
         'User',
         on_delete=models.CASCADE
     )
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=100, null=True)
     speciality = models.CharField(max_length=100, null=True)
@@ -28,11 +26,8 @@ class Patient(models.Model):
     )
     doctor = models.ForeignKey(
         'Doctor',
-        on_delete=models.CASCADE,
-        null=False
+        on_delete=models.CASCADE
     )
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=20, null=True)
     address = models.CharField(max_length=100, null=True)
     medical_condition = models.CharField(max_length=100, null=True)
@@ -42,6 +37,12 @@ class User(AbstractUser):
     """
     Model representing a user
     """
+
+    firebase_id = models.IntegerField(unique=True, null=True)
+    username = models.CharField(max_length=100, null=True)
+    first_name = models.CharField(max_length=100, null=True)
+    last_name = models.CharField(max_length=100, null=True)
+    email = models.EmailField(max_length=100, null=True)
 
     def __str__(self):
         return self.username
