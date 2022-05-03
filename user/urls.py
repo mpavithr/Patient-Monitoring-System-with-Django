@@ -8,4 +8,6 @@ urlpatterns = [
          name="get_patients"),
     path("get_doctors/", views.get_doctors,
          name="get_doctors"),
+    path("create_patient_device_measurement/", views.create_patient_device_measurement,
+         name="create_patient_device_measurement"),
 ]

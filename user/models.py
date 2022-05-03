@@ -38,11 +38,26 @@ class User(AbstractUser):
     Model representing a user
     """
 
-    firebase_id = models.IntegerField(unique=True, null=True)
-    username = models.CharField(max_length=100, null=True)
+    firebase_id = models.CharField(unique=True, null=True, max_length=100)
+    username = models.CharField(max_length=100, null=True, unique=True)
     first_name = models.CharField(max_length=100, null=True)
     last_name = models.CharField(max_length=100, null=True)
     email = models.EmailField(max_length=100, null=True)
 
     def __str__(self):
         return self.username
+
+
+class PatientDeviceMeasurement(models.Model):
+    measurement_id = models.IntegerField(primary_key=True)
+    patient = models.ForeignKey(
+        'Patient',
+        on_delete=models.CASCADE
+    )
+    machine_id = models.IntegerField(null=False)
+    date_assigned = models.DateField(null=False)
+    date_returned = models.DateField(null=False)
+    measurement = models.FloatField(null=False)
+
+    def __str__(self):
+        return str(self.measurement_id, null=False)

@@ -3,8 +3,9 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Patient, Doctor, User
+from .models import Patient, Doctor, User, PatientDeviceMeasurement
 import json
+import datetime
 
 
 @api_view(['POST'])
@@ -13,19 +14,23 @@ def create_user(request):
     Creates user
     """
     data = json.loads(request.body)
-    user_name = data['first_name'] + '_' + data['last_name']
+    user_name = data['userId']
     user = User.objects.create(
-        firebase_id=data['user_id'],
-        first_name=data['first_name'],
-        last_name=data['last_name'],
+        firebase_id=data['userId'],
+        first_name=data['firstname'],
+        last_name=data['lastname'],
         email=data['email'],
         username=user_name
     )
-    if data['role'] == 1:
+    if data['role'] == "1":
         last_patient = Patient.objects.all().last()
         last_doctor = Doctor.objects.all().last()
+        try:
+            last_id = last_patient.id + 1
+        except:
+            last_id = 0
         Patient.objects.create(
-            id=last_patient.id + 1,
+            id=last_id,
             user=user,
             doctor=last_doctor,
             doctor_id=last_doctor.id,
@@ -33,14 +38,18 @@ def create_user(request):
         )
     else:
         last_doctor = Doctor.objects.all().last()
+        try:
+            last_id = last_doctor.id + 1
+        except:
+            last_id = 0
         Doctor.objects.create(
-            id=last_doctor.id + 1,
+            id=last_id,
             user=user
         )
 
     return Response({
         "message": "success",
-        "user_id": data['user_id'],
+        "user_id": data['userId'],
         "pk": user.pk
     }, status=status.HTTP_200_OK)
 
@@ -51,7 +60,7 @@ def get_user(request):
     Gets user
     """
     data = json.loads(request.body)
-    user = User.objects.get(firebase_id=data['user_id'])
+    user = User.objects.get(firebase_id=data['userId'])
     try:
         Patient.objects.get(user=user)
         role = 1
@@ -76,7 +85,7 @@ def get_doctors(request):
     response = []
     for doctor in doctors:
         response.append({
-            'id': doctor.id,
+            'id': doctor.user.firebase_id,
             'first_name': doctor.user.first_name,
             'last_name': doctor.user.last_name,
             'phone_number': doctor.phone_number,
@@ -95,11 +104,41 @@ def get_patients(request):
     response = []
     for patient in patients:
         response.append({
-            'id': patient.id,
+            'id': patient.user.firebase_id,
             'first_name': patient.user.first_name,
             'last_name': patient.user.last_name,
             'phone_number': patient.phone_number,
             'address': patient.address,
-            'medical_condition': patient.medical_condition
+            'medical_condition': patient.medical_condition,
+            'measurements': []
         })
+        measurements = PatientDeviceMeasurement.objects.filter(patient=patient)
+        for measurement in measurements:
+            response[-1]['measurements'].append({
+                'measurement_id': measurement.measurement_id,
+                'machine_id': measurement.machine_id,
+                'date_assigned': str(measurement.date_assigned),
+                'date_returned': str(measurement.date_returned),
+                'measurement': measurement.measurement
+            })
     return Response(response, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def create_patient_device_measurement(request):
+    """
+    Creates patient device measurement
+    """
+    data = json.loads(request.body)
+    user = User.objects.get(firebase_id=data['patient_id'])
+    patient = Patient.objects.get(user=user)
+    PatientDeviceMeasurement.objects.create(
+        patient=patient,
+        machine_id=data['machineid'],
+        date_assigned=data['dateAssigned'],
+        date_returned=data['dateReturned'],
+        measurement=data['measurement']
+    )
+    return Response({
+        "message": "success"
+    }, status=status.HTTP_200_OK)
