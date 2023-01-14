@@ -4,7 +4,6 @@
 
 Migrated my previous repository Patient-Monitoring-Platform to Django and added a Speech to text module that implements a queue management system.
 
-This repository fulfils Project 4 for the class EC 530. (Ignore this statement if you are not a TA/Professor for the BU class EC 530)
 
 [Previous Repository](https://github.com/mpavithr/Patient-Monitoring-Platform) was done in flask. Have migrated to Django and added a new module that is the Speech to Text Module.
 
